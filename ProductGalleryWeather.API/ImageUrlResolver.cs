@@ -14,7 +14,7 @@ namespace ProductGalleryWeather.API
         }
         public string Resolve(Product source, ProductDTO destination, string destMember, ResolutionContext context)
         {
-            var request = _httpContextAccessor.HttpContext.Request;
+            var request = _httpContextAccessor.HttpContext!.Request;
             var baseUrl = $"{request.Scheme}://{request.Host}{request.PathBase}";
             return $"{baseUrl}{source.ImageUrl}";
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using ProductGalleryWeather.API.Data;
 using ProductGalleryWeather.API.Models;
 using ProductGalleryWeather.API.Repository.IRepository;
@@ -44,7 +45,11 @@ namespace ProductGalleryWeather.API.Repository
                 query = query.Where(filter);
             }
 
-            return await query.FirstOrDefaultAsync();
+           await query.FirstOrDefaultAsync();
+
+           var product = await query.FirstOrDefaultAsync();
+
+           return product!;
         }
 
         public async Task RemoveProduct(Product product)

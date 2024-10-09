@@ -27,7 +27,7 @@ namespace ProductGalleryWeather.API.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetProduct(int id)
+        public Task<IActionResult> GetProduct(int id)
         {
             throw new NotImplementedException();
         }

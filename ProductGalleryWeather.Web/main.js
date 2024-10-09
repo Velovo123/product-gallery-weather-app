@@ -16,44 +16,6 @@ const galleryImages = [
     }
 ];
 
-const products = [
-    {
-      title: "AstroFiction",
-      author: "John Doe",
-      price: 49.9,
-      image: "./assets/products/img6.png"
-    },
-    {
-      title: "Space Odissey",
-      author: "Marie Anne",
-      price: 35,
-      image: "./assets/products/img1.png"
-    },
-    {
-      title: "Doomed City",
-      author: "Jason Cobert",
-      price: 0,
-      image: "./assets/products/img2.png"
-    },
-    {
-      title: "Black Dog",
-      author: "John Doe",
-      price: 85.35,
-      image: "./assets/products/img3.png"
-    },
-    {
-      title: "My Little Robot",
-      author: "Pedro Paulo",
-      price: 0,
-      image: "./assets/products/img5.png"
-    },
-    {
-      title: "Garden Girl",
-      author: "Ankit Patel",
-      price: 45,
-      image: "./assets/products/img4.png"
-    }
-  ];
 function menuHandler(){
     document.querySelector('#open-nav-menu').addEventListener('click', ()=>{
         document.querySelector("header nav .wrapper").classList.toggle('nav-open');
@@ -127,29 +89,35 @@ function galleryHandler(){
 }
 
 function productsHandler(){
-    let freeProducts = products.filter(product=>{
-        return !product.price || product.price <= 0;
-    });
+    fetch('https://localhost:7199/api/products')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            products = data;
+            let freeProducts = products.filter(product => !product.price || product.price <= 0);
+            let paidProducts = products.filter(product => product.price > 0);
 
-    let paidProducts = products.filter(product=>{
-        return product.price > 0;
-    });
-    populateProducts(products);
-    document.querySelector(".products-filter label[for=all] span.product-amount").textContent = products.length;
-    document.querySelector(".products-filter label[for=paid] span.product-amount").textContent = paidProducts.length;
-    document.querySelector(".products-filter label[for=free] span.product-amount").textContent = freeProducts.length;
-
-    let productsFilter = document.querySelector(".products-filter");
-    productsFilter.addEventListener("click",e=>{
-        if(e.target.id === "all"){
             populateProducts(products);
-        } else if(e.target.id === "paid"){
-            populateProducts(paidProducts);
-        } else if(e.target.id === "free"){
-            populateProducts(freeProducts);
-        }
+            document.querySelector(".products-filter label[for=all] span.product-amount").textContent = products.length;
+            document.querySelector(".products-filter label[for=paid] span.product-amount").textContent = paidProducts.length;
+            document.querySelector(".products-filter label[for=free] span.product-amount").textContent = freeProducts.length;
 
-    });
+            let productsFilter = document.querySelector(".products-filter");
+            productsFilter.addEventListener("click", e => {
+                if (e.target.id === "all") {
+                    populateProducts(products);
+                } else if (e.target.id === "paid") {
+                    populateProducts(paidProducts);
+                } else if (e.target.id === "free") {
+                    populateProducts(freeProducts);
+                }
+            });
+        })
+        .catch(error => console.error('There has been a problem with your fetch operation:', error));
 }
 
 function populateProducts(productList){
@@ -159,7 +127,7 @@ function populateProducts(productList){
         let productElm = document.createElement("div");
         productElm.classList.add("product-item");
         let productImage = document.createElement("img");
-        productImage.src = product.image;
+        productImage.src = product.imageUrl;
         productImage.alt = "Image for " + product.title;
 
         let productDetails = document.createElement("div");
