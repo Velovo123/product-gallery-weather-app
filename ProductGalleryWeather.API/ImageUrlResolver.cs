@@ -14,9 +14,20 @@ namespace ProductGalleryWeather.API
         }
         public string Resolve(Product source, ProductDTO destination, string destMember, ResolutionContext context)
         {
-            var request = _httpContextAccessor.HttpContext!.Request;
-            var baseUrl = $"{request.Scheme}://{request.Host}{request.PathBase}";
+            var request = _httpContextAccessor.HttpContext.Request;
+
+            // Explicitly include the port for localhost
+            var host = request.Host.HasValue ? request.Host.ToString() : "localhost:7199";
+
+            // Ensure the port is included in the host
+            if (!host.Contains(":"))
+            {
+                host += ":7199";  // Ensure port 7199 is included
+            }
+
+            var baseUrl = $"{request.Scheme}://{host}{request.PathBase}";
             return $"{baseUrl}{source.ImageUrl}";
         }
+
     }
 }

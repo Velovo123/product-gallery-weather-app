@@ -34,6 +34,21 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    //using var scope = app.Services.CreateScope();
+    //var db = scope.ServiceProvider.GetService<AppDbContext>();
+    //if (db.Database.CanConnect())
+    //{
+    //    var pendingMigrations = db.Database.GetPendingMigrations();
+    //    if (pendingMigrations.Any())
+    //    {
+    //        db.Database.Migrate();
+    //    }
+    //}
+    //else
+    //{
+    //    db.Database.Migrate();
+    //}
 }
 
 app.UseStaticFiles();

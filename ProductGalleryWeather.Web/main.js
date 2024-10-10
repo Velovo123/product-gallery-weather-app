@@ -89,7 +89,7 @@ function galleryHandler(){
 }
 
 function productsHandler(){
-    fetch('https://localhost:7199/api/products')
+    fetch('/api/products')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -127,6 +127,7 @@ function populateProducts(productList){
         let productElm = document.createElement("div");
         productElm.classList.add("product-item");
         let productImage = document.createElement("img");
+        
         productImage.src = product.imageUrl;
         productImage.alt = "Image for " + product.title;
 

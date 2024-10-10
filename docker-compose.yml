@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  web-api:
+    build: 
+      context: ./ProductGalleryWeather.API   
+    container_name: web-api
+    hostname: web-api
+    ports:
+      - "7199:7199"  
+    depends_on:
+      - db     
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:7199
+      - ASPNETCORE_PORT=7199
+  frontend:
+    build: 
+      context: ./ProductGalleryWeather.Web  
+    container_name: frontend
+    ports:
+      - "3000:80"  
+  
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    container_name: mssql-db
+    hostname: mssql-db
+    environment:
+      - SA_PASSWORD=P@ssword1  
+      - ACCEPT_EULA=Y          
+    ports:
+      - "1433:1433"  
+    volumes:
+      - mssql-data:/var/opt/mssql 
+
+volumes:
+  mssql-data:
