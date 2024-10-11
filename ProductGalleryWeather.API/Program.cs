@@ -37,9 +37,9 @@ if (app.Environment.IsDevelopment())
 
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetService<AppDbContext>();
-   
-    if(db != null && db.Database.GetPendingMigrations().Any())
+    if (db != null)
     {
+        db.Database.EnsureDeleted();
         db.Database.Migrate();
     }
 }
