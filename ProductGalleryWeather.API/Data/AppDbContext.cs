@@ -51,7 +51,7 @@ namespace ProductGalleryWeather.API.Data
                    Id = 4,
                    Title = "Garden Girl",
                    Author = "F. Scott Fitzgerald",
-                   Price = 14.99m,
+                   Price = 0m,
                    ImageUrl = "/products/images/garden-girl.png"
                },
                new Product
@@ -59,7 +59,7 @@ namespace ProductGalleryWeather.API.Data
                    Id = 5,
                    Title = "My little Robot",
                    Author = "Jane Austen",
-                   Price = 13.99m,
+                   Price = 0m,
                    ImageUrl = "/products/images/my-little-robot.png"
                },
                new Product
