@@ -14,7 +14,7 @@ namespace ProductGalleryWeather.API
         }
         public string Resolve(Product source, ProductDTO destination, string destMember, ResolutionContext context)
         {
-            var request = _httpContextAccessor.HttpContext.Request;
+            var request = _httpContextAccessor.HttpContext!.Request;
 
             // Explicitly include the port for localhost
             var host = request.Host.HasValue ? request.Host.ToString() : "localhost:7199";
