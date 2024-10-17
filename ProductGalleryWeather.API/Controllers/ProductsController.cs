@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductGalleryWeather.API.Models.Dto;
 using ProductGalleryWeather.API.Repository.IRepository;
 
 namespace ProductGalleryWeather.API.Controllers
 {
+
     [ApiController]
     [Route("api/products")]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IProductRepository _productRepository;

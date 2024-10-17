@@ -89,35 +89,65 @@ function galleryHandler(){
 }
 
 function productsHandler(){
-    fetch('/api/products')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+    const token = localStorage.getItem('jwtToken');
+    if (!token) {
+      window.location.href = "/login.html";
+    } else {
+      fetch("/api/products", {
+        method: "GET",
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.status === 401) {
+            window.location.href = "/login.html";
+            return;
+          }
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          return response.json();
+        })
+        .then((data) => {
+          const products = data;
+          const freeProducts = products.filter(
+            (product) => !product.price || product.price <= 0
+          );
+          const paidProducts = products.filter((product) => product.price > 0);
+
+          populateProducts(products);
+          document.querySelector(
+            ".products-filter label[for=all] span.product-amount"
+          ).textContent = products.length;
+          document.querySelector(
+            ".products-filter label[for=paid] span.product-amount"
+          ).textContent = paidProducts.length;
+          document.querySelector(
+            ".products-filter label[for=free] span.product-amount"
+          ).textContent = freeProducts.length;
+
+          const productsFilter = document.querySelector(".products-filter");
+          productsFilter.addEventListener("click", (e) => {
+            if (e.target.id === "all") {
+              populateProducts(products);
+            } else if (e.target.id === "paid") {
+              populateProducts(paidProducts);
+            } else if (e.target.id === "free") {
+              populateProducts(freeProducts);
             }
-            return response.json();
+          });
         })
-        .then(data => {
-            products = data;
-            let freeProducts = products.filter(product => !product.price || product.price <= 0);
-            let paidProducts = products.filter(product => product.price > 0);
-
-            populateProducts(products);
-            document.querySelector(".products-filter label[for=all] span.product-amount").textContent = products.length;
-            document.querySelector(".products-filter label[for=paid] span.product-amount").textContent = paidProducts.length;
-            document.querySelector(".products-filter label[for=free] span.product-amount").textContent = freeProducts.length;
-
-            let productsFilter = document.querySelector(".products-filter");
-            productsFilter.addEventListener("click", e => {
-                if (e.target.id === "all") {
-                    populateProducts(products);
-                } else if (e.target.id === "paid") {
-                    populateProducts(paidProducts);
-                } else if (e.target.id === "free") {
-                    populateProducts(freeProducts);
-                }
-            });
-        })
-        .catch(error => console.error('There has been a problem with your fetch operation:', error));
+        .catch((error) =>
+          console.error(
+            "There has been a problem with your fetch operation:",
+            error
+          )
+        );
+    }
 }
 
 function populateProducts(productList){
